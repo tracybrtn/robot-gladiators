@@ -154,29 +154,25 @@ var endGame = function() {
 var shop = function() {
   // ask plater what they'd like to do
   var shopOptionPrompt = window.prompt(
-    "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE' or 'LEAVE' to make a choice."
+    "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter 1 for REFILL, 2 for UPGRADE or 3 to LEAVE."
   );
+
+  // convert answer from prompt to an actual number
+  shopOptionPrompt = parseInt(shopOptionPrompt);
 
   //use switch to carry out action
   switch (shopOptionPrompt) {
-    case "refill":
-    case "REFILL":
+    case 1:
       playerInfo.refillHealth();
       break;      
-    case "upgrade":
-    case "UPGRADE":
+    case 2:
       playerInfo.upgradeAttack();
       break;
-    case "leave":
-    case "LEAVE":
+    case 3:
       window.alert("Leaving the store.");
-
-      // do nothing, so function will end
       break;
     default:
       window.alert("You did not pick a valid option. Try again");
-
-      //call shop() again to force player to pick a valid option
       shop();
       break;
   }
@@ -193,6 +189,10 @@ var getPlayerName = function() {
   console.log("Your robot's name is " + name);
   return name;
 };
+
+/* END GAME FUNCTIONS */
+
+/* GAME INFORMATION / VARIABLES */
 
 var playerInfo = {
   name: getPlayerName(),
@@ -238,6 +238,8 @@ var enemyInfo = [
     attack: randomNumber(10, 14)
   }
 ];
+
+/* END GAME INFORMATION / VARIABLES */
 
 // start first game when page loads
 startGame();
