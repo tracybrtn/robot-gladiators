@@ -168,14 +168,23 @@ var startGame = function() {
 var endGame = function() {
   window.alert("The game has now ended. Let's see how you did!");
 
-  // if player is still alive, player wins!
-  if (playerInfo.health > 0) {
-    window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + '.');
-    } else {
-    window.alert("You've lost your robot in battle!");
-  }
+ // check localStorage for high score, if it's not there use 0
+ var highScore = localStorage.getItem("highscore");
+ if (highScore === null) {
+  highScore = 0
+ }
+ 
+ // if player has more money than the high score, player as new high score
+if (playerInfo.money > highScore) {
+  localStorage.setItem("highscore", playerInfo.money);
+  localStorage.setItem("name", playerInfo.name);
 
-  // k player if they;d like to play again
+  alert(playerInfo.name + " now has the high score of " + playerInfo.money + "!");
+} else {
+  alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
+}
+
+  //ask player if they;d like to play again
   var playAgainConfirm = window.confirm("Would you like to play again?");
 
   if(playAgainConfirm) {
@@ -220,7 +229,6 @@ var getPlayerName = function() {
   while (name === "" || name === null) {
     name = prompt("What is your robot's name?");
   }
-
   console.log("Your robot's name is " + name);
   return name;
 };
@@ -229,9 +237,8 @@ var getPlayerName = function() {
 
 /* GAME INFORMATION / VARIABLES */
 
-// player information
 var playerInfo = {
-  name: window.prompt("What is your robot's name?"),
+  name: getPlayerName(),
   health: 100,
   attack: 10,
   money: 10,
@@ -245,24 +252,21 @@ var playerInfo = {
       window.alert("Refilling player's health by 20 for 7 dollars.");
       this.health += 20;
       this.money -= 7;
-    }
-    else {
+    } else {
       window.alert("You don't have enough money!");
     }
   },
   upgradeAttack: function() {
     if (this.money >= 7) {
-      window.alert("Upgrading plater's attack by 6 for 7 dollars.")
+      window.alert("Upgrading player's attack by 6 for 7 dollars.");
       this.attack += 6;
       this.money -= 7;
-    }
-    else {
-      window.alert("You don't have enough money");
+    } else {
+      window.alert("You don't have enough money!");
     }
   }
 };
 
-// enemy information
 var enemyInfo = [
   {
     name: "Roborto",
@@ -280,5 +284,5 @@ var enemyInfo = [
 
 /* END GAME INFORMATION / VARIABLES */
 
-// RUN GAME
+/* RUN GAME */
 startGame();
