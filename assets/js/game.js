@@ -42,57 +42,90 @@ var fightOrSkip = function() {
 
 // fight function
 var fight = function(enemy) {
-  console.log(enemy);
+  // keep track of who goes first
+  var isPlayerTurn = true;
+
+  // randomly change turn order
+  if (Math.random() > 0.5) {
+    isPlayerTurn = false;
+  }
 
   while (playerInfo.health > 0 && enemy.health > 0) {
-    fightOrSkip();
-    var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
+    if (isPlayerTurn) {
+      // ask player if they'd like to fight or skip using fightOrSkip function
+      if(fightOrSkip()) {
+        // if true, leave fight by breaking loop
+        break;
+      }
 
-  // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
-  enemy.health = Math.max(0, enemy.health - damage);
-  console.log(
-    playerInfo.name + " attacked " + enemy.name + ". " + enemy.name + " now has " + enemy.health + " health remaining."
-  );
+      var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
-  // check enemy's health
-  if (enemy.health <= 0) {
-    window.alert(enemy.name + " has died!");
+      // remove enemy's health by subtracting the amount set in the playerInfo.attack variable
+      enemy.health = Math.max(0, enemy.health - damage);
+      console.log(
+        playerInfo.name + 
+          " attacked " + 
+          enemy.name + 
+          ". " + 
+          enemy.name + 
+          " now has " 
+          + enemy.health + 
+          " health remaining."
+      );
 
-    // award player money for winning
-    playerInfo.money = playerInfo.money + 20;
+      // check enemy's health
+      if (enemy.health <= 0) {
+        window.alert(enemy.name + " has died!");
 
-    //leave while() loop since enemy is dead
-    break;
-  }  else {
-    window.alert(enemy.name + " still has " + enemy.health + " health left.");
-  }
+        // award player money for winning
+        playerInfo.money = playerInfo.money + 20;
 
-  var damage = randomNumber(enemy.attack - 3, enemy.attack)
-  // remove players's health by subtracting the amount set in the enemy.attack variable
-  playerInfo.health = Math.max(0, playerInfo.health - damage);
-  console.log(
-    enemy.name + " attacked " + playerInfo.name + ". " + playerInfo.name + " now has " + playerInfo.health + " health remaining."
-  );
+        //leave while() loop since enemy is dead
+        break;
+      } else {
+       window.alert(enemy.name + " still has " + enemy.health + " health left.");
+      }
+      // player gets attacked first
+    } else {
+      var damage = randomNumber(enemy.attack - 3, enemy.attack)
+      
+      // remove players's health by subtracting the amount set in the enemy.attack variable
+      playerInfo.health = Math.max(0, playerInfo.health - damage);
+      console.log(
+        enemy.name + 
+          " attacked " + 
+          playerInfo.name + 
+          ". " + 
+          playerInfo.name + 
+          " now has " + 
+          playerInfo.health + 
+          " health remaining."
+      );
 
-  // check player's health
-  if (playerInfo.health <= 0) {
-    window.alert(playerInfo.name + " has died!");
-    // leave while() loop if player is dead
-    break;
-  } else {
-    window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
-  }
+      // check player's health
+      if (playerInfo.health <= 0) {
+        window.alert(playerInfo.name + " has died!");
+        // leave while() loop if player is dead
+        break;
+      } else {
+        window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
+      }
+    }
+    // switch turn order for next round
+    isPlayerTurn = !isPlayerTurn;
   } // end of while loop
 }; // end of fight function
-
 
 //function to start a new game
 var startGame = function() {
   //reset player stats
   playerInfo.reset();
 
-// fight each enemy robot by looping over them and fighting them one at a time
+  // fight each enemy robot by looping over them and fighting them one at a time
   for (var i = 0; i < enemyInfo.length; i++) {
+    // check player stats
+    console.log(playerInfo);
+
     //if player is still alive, keep fighting
     if (playerInfo.health >0) {
       //let player know what round they are in
@@ -104,6 +137,8 @@ var startGame = function() {
       //reset enemy.health before starting new fight
       pickedEnemyObj.health = randomNumber(40,60);
 
+      console.log(pickedEnemyObj);
+
       // pass the pickedEnemyObj variable's value into the fight function
       fight(pickedEnemyObj);
 
@@ -114,7 +149,7 @@ var startGame = function() {
         
         // if yes, take them to the store() function
         if (storeConfirm) {
-        shop();
+          shop();
       }
     }
   }
